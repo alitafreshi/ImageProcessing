@@ -1,6 +1,7 @@
 package com.tafreshiali.imageprocessing.components
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,14 +40,14 @@ import com.tafreshiali.imageprocessing.util.effect.shimmerEffect
 @Composable
 fun ImagePreviewComponent(
     modifier: Modifier,
-    imageUrl: String,
+    imageUri: Uri?,
     onSuccess: (Bitmap?) -> Unit,
     onAddImageClick: () -> Unit
 ) {
     var retryHash by remember { mutableIntStateOf(0) }
     val request = ImageRequest.Builder(LocalContext.current)
         .size(100)
-        .data(imageUrl)
+        .data(imageUri)
         .setParameter("retry_hash", retryHash)
         .allowConversionToBitmap(true)
         .allowHardware(false)
@@ -57,7 +58,7 @@ fun ImagePreviewComponent(
         .build()
 
 
-    if (imageUrl.isEmpty()) {
+    if (imageUri?.path != null) {
         ImagePreviewEmptyState(onAddImageClick = onAddImageClick)
     } else {
         SubcomposeAsyncImage(
@@ -95,7 +96,7 @@ fun ImagePreviewComponent(
 @Preview(showSystemUi = true)
 @Composable
 fun ImagePreviewComponentPreview() {
-    ImagePreviewComponent(modifier = Modifier, imageUrl = "", {},{})
+    ImagePreviewComponent(modifier = Modifier, imageUri = null, {}, {})
 }
 
 @Composable

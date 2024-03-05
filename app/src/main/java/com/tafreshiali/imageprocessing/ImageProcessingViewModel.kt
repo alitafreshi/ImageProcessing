@@ -1,11 +1,16 @@
 package com.tafreshiali.imageprocessing
 
+import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log.d
+import androidx.compose.runtime.internal.composableLambdaInstance
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.canhub.cropper.CropImage.CancelledResult.bitmap
 import com.tafreshiali.imageprocessing.state.ImageProcessingViewState
 import com.tafreshiali.imageprocessing.state.RGBMatrix
 import kotlinx.coroutines.Deferred
@@ -23,6 +28,7 @@ class ImageProcessingViewModel : ViewModel() {
     val viewState = _viewState.asStateFlow()
 
     fun updateImageUri(imageUri: Uri?) {
+        d("IMAGE_URI", "uri is = $imageUri")
         _viewState.update {
             it.copy(imageUri = imageUri)
         }
